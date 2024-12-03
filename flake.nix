@@ -31,9 +31,9 @@
       pkgs = nixpkgs.legacyPackages.${system};
       lib = pkgs.lib;
       python = builtins.getAttr pythonPackageName pkgs;
-      runs = what: pkgs.runCommand what {} ''
+      fromEnv = ships: runs: pkgs.runCommand runs {} ''
         mkdir -p $out/bin
-        cp ${self.packages.${system}.default}/bin/${what} $out/bin
+        cp ${self.packages.${system}.default}/bin/${ships} $out/bin
       '';
     in {
       default = pkgs.buildEnv {
@@ -41,10 +41,10 @@
         paths = builtins.attrValues self.environments.${system};
       };
 
-      python = runs "python";
-      jupyter-lab = runs "jupyter-lab";
-      jupyter-notebook = runs "jupyter-notebook";
-      jupyter = runs "jupyter*";
+      python = fromEnv "python" "python";
+      jupyter-lab = fromEnv "jupyter-lab" "jupyter-lab";
+      jupyter-notebook = fromEnv "jupyter-notebook" "jupyter-notebook";
+      jupyter = fromEnv "jupyter*" "jupyter";
     });
 
   };
