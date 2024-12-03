@@ -31,19 +31,16 @@
       pkgs = nixpkgs.legacyPackages.${system};
       lib = pkgs.lib;
       python = builtins.getAttr pythonPackageName pkgs;
+      runs = what: pkgs.runCommand what {} ''
+        mkdir -p $out/bin
+        cp ${self.packages.${system}.default}/bin/${what} $out/bin
+      '';
     in {
       default = pkgs.buildEnv {
         name = "astronomy";
         paths = builtins.attrValues self.environments.${system};
       };
-    });
 
-    apps = withSystem(system: let
-      runs = (what: {
-        type = "app";
-        program = "${self.packages.${system}.default}/bin/${what}";
-      });
-    in {
       python = runs "python";
       jupyter-lab = runs "jupyter-lab";
       jupyter-notebook = runs "jupyter-notebook";
