@@ -47,6 +47,7 @@
       python = runs "python";
       jupyter-lab = runs "jupyter-lab";
       jupyter-notebook = runs "jupyter-notebook";
+      jupyter = runs "jupyter";
     });
 
   };
