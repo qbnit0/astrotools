@@ -38,5 +38,16 @@
       };
     });
 
+    apps = withSystem(system: let
+      runs = (what: {
+        type = "app";
+        program = "${self.packages.${system}.default}/bin/${what}";
+      });
+    in {
+      python = runs "python";
+      jupyter-lab = runs "jupyter-lab";
+      jupyter-notebook = runs "jupyter-notebook";
+    });
+
   };
 }
