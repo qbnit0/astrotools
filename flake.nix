@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Computing environment for astronomy";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs";
