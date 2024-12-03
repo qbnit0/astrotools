@@ -6,13 +6,15 @@
   };
 
   outputs = { self, nixpkgs }: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-    lib = pkgs.lib;
-    python = pkgs.python312;
+    withSystem = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.unix;
+    pythonPackageName = "python312";
   in {
 
-    environments.${system} = {
+    environments = withSystem(system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+      lib = pkgs.lib;
+      python = builtins.getAttr pythonPackageName pkgs;
+    in {
       python = python.withPackages(pythonPackages: with pythonPackages; [
         numpy
         scipy
@@ -23,12 +25,18 @@
         sympy
         jupyter
       ]);
-    };
+    });
 
-    packages.${system}.default = pkgs.buildEnv {
-      name = "science";
-      paths = builtins.attrValues self.environments.${system};
-    };
+    packages = withSystem(system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+      lib = pkgs.lib;
+      python = builtins.getAttr pythonPackageName pkgs;
+    in {
+      default = pkgs.buildEnv {
+        name = "astronomy";
+        paths = builtins.attrValues self.environments.${system};
+      };
+    });
 
   };
 }
