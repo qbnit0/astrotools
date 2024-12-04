@@ -18,7 +18,7 @@
       python = python.withPackages(pythonPackagesOriginal: let
         pythonPackages = lib.fix (lib.extends (import ./pkgs/python { inherit pkgs; }) (_: pythonPackagesOriginal));
       in with pythonPackages; [
-        numpy
+        numpy_2
         scipy
         matplotlib
         pandas
