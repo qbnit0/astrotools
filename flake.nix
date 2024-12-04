@@ -15,7 +15,9 @@
       lib = pkgs.lib;
       python = builtins.getAttr pythonPackageName pkgs;
     in {
-      python = python.withPackages(pythonPackages: with pythonPackages; [
+      python = python.withPackages(pythonPackagesOriginal: let
+        pythonPackages = lib.fix (lib.extends (import ./pkgs/python { inherit pkgs; }) (_: pythonPackagesOriginal));
+      in with pythonPackages; [
         numpy
         scipy
         matplotlib
