@@ -24,6 +24,8 @@
         pandas
         pint
         astropy
+        ccdproc
+        astroalign
         sympy
         jupyter
       ]);
